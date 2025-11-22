@@ -5,6 +5,20 @@ Location: `/usr/local/bin/baux-bot.sh` (or wherever you dropped it)
 This is the live, repo-aware, sarcastic AI assistant that ships with RoxieOS.  
 It is deliberately simple, deliberately loud, and deliberately good enough for v0.1 Rick-Roll Edition.
 
+Uses? 
+#1 VIM TUTOR
+#2 TMUX TUTOR
+#3 ROXIEOS MAN RTFM'ing everything os helper bot
+
+"AI sheparding" 2-bot question:
+* local 2-3 second response
+* local 2-3 second "better AI picker"
+  * suggests which AI would likely have a better answer
+    * SEND: send the qustion to smarter bot
+    * Edit: open the question, and answer, in a buffer in vim that:
+      * Better rewrite the question
+      * Select which of top 3 AI choices to send it to (4th line "other" to use another AI)
+
 ### What It Does Right Now (and does it well)
 
 - Hard-coded to the full monorepo at `/src/roxieos`
