@@ -1,0 +1,21 @@
+#!/bin/bash
+# baux-bot — receives JSON from vim, dispatches to correct backend, appends to log
+
+PAYLOAD="$1"
+LOG="/tmp/baux-bot.log"
+TIMESTAMP=$(date '+%H:%M:%S')
+
+# Pick backend based on model field
+MODEL=$(echo "$PAYLOAD" | jq -r '.model')
+
+BACKEND="/etc/baux/bot-backends/$MODEL.sh"
+[ -f "$BACKEND" ] || { echo "$TIMESTAMP [ERROR] no backend $MODEL" >> "$LOG"; exit 1; }
+
+echo "$TIMESTAMP [$MODEL] === QUESTION ===" >> "$LOG"
+echo "$PAYLOAD" | jq -r '.question' >> "$LOG"
+echo "$TIMESTAMP [$MODEL] === THINKING ===" >> "$LOG"
+
+RESPONSE=$(bash "$BACKEND" "$PAYLOAD" 2>/dev/null)
+echo "$TIMESTAMP [$MODEL] === ANSWER ===" >> "$LOG"
+echo "$RESPONSE" >> "$LOG"
+echo "────────────────────────────────────────" >> "$LOG"

@@ -1,0 +1,18 @@
+function! BauxBotSend(model) range
+  let l:lines = getline(a:firstline, a:lastline)
+  let l:payload = {
+    \ 'model': a:model,
+    \ 'file': expand('%:p'),
+    \ 'selection': l:lines,
+    \ 'context': join(systemlist('find /src -name README-GROK.md | xargs cat 2>/dev/null'), "\n"),
+    \ 'question': join(l:lines, "\n")
+    \ }
+  call system('baux-bot "' . escape(json_encode(l:payload), '"') . '" &')
+  " Open or switch to the read-only bot pane
+  silent !tmux split-window -h -p 40 "tail -f /tmp/baux-bot.log | sed 's/^/BOT> /'" \; select-pane -L
+endfunction
+
+" Usage
+command! -range BauxGrok    call BauxBotSend('grok-4')
+command! -range BauxClaude  call BauxBotSend('claude-3.5-sonnet')
+command! -range BauxOllama  call BauxBotSend('deepseek-coder')
